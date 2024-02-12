@@ -1,0 +1,26 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import FilmCard from './FilmCard';
+
+const FilmsList = ({ films }) => {
+  return (
+    <div className="ui four cards">
+      {films.length === 0 ? (
+        // eslint-disable-next-line react/jsx-no-undef
+        <Message>No films in our base yet</Message>
+      ) : (
+        films.map((film) => <FilmCard key={film._id} film={film} />)
+      )}
+    </div>
+  );
+};
+
+FilmsList.propTypes = {
+  films: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+FilmsList.defaultProps = {
+  films: [],
+};
+
+export default FilmsList;
