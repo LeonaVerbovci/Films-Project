@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import FilmContext from '../context/FilmContext';
 
 const Featured = ({ featured, id }) => {
-  const { toggleFeatured, testContext } = useContext(FilmContext);
-  console.log('featured', featured, testContext);
+  const { toggleFeatured } = useContext(FilmContext);
+  console.log('featured', featured);
   const cls = featured ? 'yellow' : 'empty';
 
   return (
