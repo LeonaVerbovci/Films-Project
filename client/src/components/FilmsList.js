@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FilmCard from './FilmCard';
+import Message from './Message';
 
 const FilmsList = ({ films }) => {
+  console.log(films);
   return (
     <div className="ui four cards">
       {films.length === 0 ? (

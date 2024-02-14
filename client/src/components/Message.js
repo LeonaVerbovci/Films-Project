@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// eslint-disable-next-line react/prop-types
 const Message = ({ children, type, color }) => {
   return (
     <div className={`ui icon message ${color}`}>
@@ -11,6 +12,7 @@ const Message = ({ children, type, color }) => {
     </div>
   );
 };
+// eslint-disable-next-line react/no-typos
 Message.PropTypes = {
   type: PropTypes.string,
   color: PropTypes.string,
