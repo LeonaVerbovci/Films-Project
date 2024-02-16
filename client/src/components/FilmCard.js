@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Featured from './Featured';
+import FilmContext from '../context/FilmContext';
 
 const FilmCard = ({ film }) => {
   const [confirm, setConfirm] = useState(false);
-
   const showConfirm = () => setConfirm(true);
   const hideConfirm = () => setConfirm(false);
+
+  const { selectFilmForEdit } = useContext(FilmContext);
 
   return (
     <div className="ui card">
@@ -44,7 +46,7 @@ const FilmCard = ({ film }) => {
             </>
           ) : (
             <>
-              <span className="ui green basic button" onClick={() => {}}>
+              <span className="ui green basic button" onClick={() => selectFilmForEdit(film)}>
                 <i className="ui icon edit"></i>
               </span>
               <span className="ui red basic button" onClick={showConfirm}>

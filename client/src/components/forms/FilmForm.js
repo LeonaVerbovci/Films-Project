@@ -40,10 +40,58 @@ const FilmForm = ({ film, saveFilm, hideForm }) => {
 
   const handleNumberChange = ({ target }) => {
     const val = target.value.replace(/\D/g, '');
+    setData({
+      ...data,
+      [target.name]: Number(val),
+    });
+    setErrors({
+      ...errors,
+      [target.name]: '',
+    });
   };
 
+  const handleCheckBoxChange = (event) => {
+    const { name, checked } = event.target;
+    //  eventiosht objekt e ka mrena targetin,targeti objekt mrena name,checked
+    setData({
+      ...data,
+      [name]: checked,
+    });
+  };
+
+  const validate = (data) => {
+    const errors = {};
+    if (!data.title) errors.title = 'title can not be blank';
+    if (!data.description) errors.description = 'description can not be blank';
+    if (!data.director) errors.director = 'director can not be blank';
+    if (!data.img) errors.img = 'image can not be blank';
+    if (!data.duration) errors.duration = 'duration can not be blank';
+    if (!data.price) errors.description = 'price can not be blank';
+
+    if (parseInt(data.duration) < 1) {
+      errors.duration = 'Duration cannot be ngeative value';
+    }
+    if (parseFloat(data.price) <= 0) {
+      errors.price = 'Price cannot be ngeative value';
+    }
+
+    return errors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const errors = validate(data);
+
+    setErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      //objct.keys i mer keys te objektit eors,k\then nje array nese nuk ka errors i thirr funksionet savedata dhe set data
+      saveFilm(data);
+      setData(initData);
+    }
+  };
   return (
-    <form className="ui form">
+    <form onSubmit={handleSubmit} className="ui form">
       <div className="ui grid">
         {/* components here */}
         <div className="twelve wide column">
@@ -113,13 +161,39 @@ const FilmForm = ({ film, saveFilm, hideForm }) => {
               <input
                 value={data.duration}
                 onChange={handleNumberChange}
-                type="text"
+                type="number"
                 name="duration"
                 id="duration"
                 placeholder="film duration"
               />
               <FormMessage>{errors.duration}</FormMessage>
             </div>
+          </div>
+          <div className="six wide column">
+            <div className={errors.price ? 'field.error' : 'field'}>
+              <label>Price</label>
+              <input
+                value={data.price}
+                onChange={handleNumberChange}
+                type="number"
+                name="price"
+                id="price"
+                placeholder="film pice"
+              />
+
+              <FormMessage>{errors.price}</FormMessage>
+            </div>
+          </div>
+          <div className="six wide column inline field">
+            <label htmlFor="featured">Featured</label>
+            <input
+              onChange={handleCheckBoxChange}
+              value={data.featured}
+              type="checkbox"
+              name="featured"
+              id="featured"
+              checked={data.featured}
+            ></input>
           </div>
         </div>
       </div>
