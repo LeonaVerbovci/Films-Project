@@ -4,12 +4,11 @@ import FilmContext from '../context/FilmContext';
 
 const Featured = ({ featured, id }) => {
   const { toggleFeatured } = useContext(FilmContext);
-  console.log('featured', featured);
-  const cls = featured ? 'yellow' : 'empty';
 
+  const cls = featured ? 'yellow' : 'empty';
   return (
     <span className="ui right corner label" onClick={() => toggleFeatured(id)}>
-      <i className={`star icon ${cls}`}></i>
+      <i className={`star icon ${cls}`} />
     </span>
   );
 };
@@ -18,4 +17,5 @@ Featured.propTypes = {
   id: PropTypes.string.isRequired,
   featured: PropTypes.bool.isRequired,
 };
+
 export default Featured;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import _orderBy from 'lodash/orderBy';
 import './App.css';
 import FilmsList from './components/FilmsList';
@@ -42,6 +42,7 @@ function App() {
   };
 
   const cols = showAddForm ? 'ten' : 'sixteen';
+
   return (
     <FilmContext.Provider value={{ toggleFeatured }}>
       <div className="ui container pt3">

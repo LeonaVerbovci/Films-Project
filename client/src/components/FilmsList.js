@@ -4,11 +4,9 @@ import FilmCard from './FilmCard';
 import Message from './Message';
 
 const FilmsList = ({ films }) => {
-  console.log(films);
   return (
     <div className="ui four cards">
       {films.length === 0 ? (
-        // eslint-disable-next-line react/jsx-no-undef
         <Message>No films in our base yet</Message>
       ) : (
         films.map((film) => <FilmCard key={film._id} film={film} />)
