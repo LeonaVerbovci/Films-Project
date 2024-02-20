@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import _orderBy from 'lodash/orderBy';
+import { generate as id } from 'shortid';
 import './App.css';
 import FilmsList from './components/FilmsList';
 import { films as items } from './data';
@@ -49,14 +50,28 @@ function App() {
   const selectFilmForEdit = (selectedFilm) => {
     setSelectedFilm(selectedFilm);
   };
-  const addFilm = () => {};
-  const updateFilm = () => {};
+  const addFilm = (film) => {
+    console.log('add film', film);
+    setAllFilms((prevFilms) => sortFilms([...prevFilms, { ...film, _id: id() }]));
+    setShowAddForm(false);
+  };
+
+  const updateFilm = (film) => {
+    console.log('film', film);
+  };
 
   const saveFilm = (film) => {
     film._id === null ? addFilm(film) : updateFilm(film);
   };
+
+  const deleteFilm = (film) => {
+    setAllFilms((prevFilms) => sortFilms(prevFilms.filter((f) => f._id !== film._id)));
+    setSelectedFilm({});
+    setShowAddForm(false);
+  };
+
   return (
-    <FilmContext.Provider value={{ toggleFeatured, selectFilmForEdit }}>
+    <FilmContext.Provider value={{ toggleFeatured, selectFilmForEdit, deleteFilm }}>
       <div className="ui container pt3">
         <TopNavigation showForm={showForm} />
         <div className="ui stackable grid">

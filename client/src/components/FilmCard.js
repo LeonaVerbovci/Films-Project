@@ -7,8 +7,7 @@ const FilmCard = ({ film }) => {
   const [confirm, setConfirm] = useState(false);
   const showConfirm = () => setConfirm(true);
   const hideConfirm = () => setConfirm(false);
-
-  const { selectFilmForEdit } = useContext(FilmContext);
+  const { selectFilmForEdit, deleteFilm } = useContext(FilmContext);
 
   return (
     <div className="ui card">
@@ -35,7 +34,7 @@ const FilmCard = ({ film }) => {
         <div className="ui two buttons">
           {confirm ? (
             <>
-              <span className="ui red button" onClick={() => {}}>
+              <span className="ui red button" onClick={() => deleteFilm(film)}>
                 <i className="ui icon check"></i>
                 YES
               </span>
