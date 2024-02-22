@@ -24,7 +24,7 @@ const FilmForm = ({ film, saveFilm, hideForm }) => {
     } else {
       setData(initData);
     }
-    setErrors({});
+    setErrors({}); // errori nuk duhet te shfaqet pasi te ndryshohet selected film
   }, [film]);
 
   const handleStringChange = ({ target }) => {
