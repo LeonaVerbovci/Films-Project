@@ -7,7 +7,7 @@ function SignUpPage(props) {
   const submit = (user) => {
     api.users
       .create(user)
-      .then(() => props.setMessage('You have een successfully Signed up'))
+      .then(() => props.setMessage('You have been successfully Signed up'))
       .then(() => props.history.push('/login'));
   };
 

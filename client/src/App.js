@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import jwtDecode from 'jwt-decode';
+import './App.css';
 import TopNavigation from './components/TopNavigation';
-import { Route } from 'react-router-dom';
+import { Route, Router, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import FilmsPage from './pages/FilmsPage';
+import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
-import SingUpPage from './pages/SingUpPage';
 import { setAuthorizationHeaders } from './utils';
 
 function App() {
@@ -14,7 +14,6 @@ function App() {
     token: null,
     role: 'user',
   });
-
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -26,7 +25,7 @@ function App() {
       });
       setAuthorizationHeaders(token);
     }
-  }, []); //ekzekutohet heren e pare kur renderohet komponenta
+  }, []);
 
   const logout = () => {
     setUser({
@@ -47,24 +46,29 @@ function App() {
   };
 
   return (
-    <div className="ui container mt-3">
-      <TopNavigation
-        isAuth={user.token}
-        logout={logout}
-        isAdmin={user.token && user.role === 'admin'}
-      />
+    <Router>
+      <div className="ui container mt-3">
+        <TopNavigation
+          isAuth={user.token}
+          logout={logout}
+          isAdmin={user.token && user.role === 'admin'}
+        />
 
-      {message && (
-        <div className="ui info message">
-          <i className="close icon" onClick={() => setMessage('')}></i>
-        </div>
-      )}
-      <Route excat path="/" component={HomePage} />
-      <Route path="/films" render={(props) => <FilmsPage user={user} {...props} />} />
-      <Route path="/film/:_id" component={Film} />
-      <Route path="/signup" render={(props) => <SingUpPage {...props} setMessage={setMessage} />} />
-      <Route path="/login" render={(props) => <LoginPage {...props} login={login} />} />
-    </div>
+        {message && (
+          <div className="ui info message">
+            <i className="close icon" onClick={() => setMessage('')} />
+            {message}
+          </div>
+        )}
+        <Routes>
+          <Route exact path="/" element={<HomePage />} />
+          <Route path="/films" element={<FilmsPage user={user} />} />
+          <Route path="/film/:_id" element={<Film />} />
+          <Route path="/signup" element={<SignUpPage setMessage={setMessage} />} />
+          <Route path="/login" element={<LoginPage login={login} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
