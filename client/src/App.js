@@ -49,7 +49,7 @@ function App() {
     <Router>
       <div className="ui container mt-3">
         <TopNavigation
-          isAuth={user.token}
+          isAuth={!!user.token}
           logout={logout}
           isAdmin={user.token && user.role === 'admin'}
         />
