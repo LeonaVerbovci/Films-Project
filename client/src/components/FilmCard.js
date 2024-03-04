@@ -1,13 +1,49 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Featured from './Featured';
-import FilmContext from '../context/FilmContext';
+import { AppContext } from '../pages/FilmsPage';
+import { Link } from 'react-router-dom';
 
 const FilmCard = ({ film }) => {
   const [confirm, setConfirm] = useState(false);
+  const { deleteFilm, user } = useContext(AppContext);
+
   const showConfirm = () => setConfirm(true);
   const hideConfirm = () => setConfirm(false);
-  const { selectFilmForEdit, deleteFilm } = useContext(FilmContext);
+
+  const adminActions = (
+    <div className="extra content">
+      <div className="ui two buttons">
+        {confirm ? (
+          <>
+            <span className="ui red button" onClick={() => deleteFilm(film)}>
+              <i className="ui icon check"></i>
+              YES
+            </span>
+            <span className="ui grey basic button" onClick={hideConfirm}>
+              <i className="ui icon icon close" />
+              NO
+            </span>
+          </>
+        ) : (
+          <div className="ui two buttons">
+            <Link to={`/films/edit/${film._id}`} className="ui green basic button">
+              <i className="ui icon edit" />
+            </Link>
+            <span className="ui red basic button" onClick={showConfirm}>
+              <i className="ui icon trash"></i>
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const userAction = (
+    <div className="extra content">
+      <button className="ui green basic button">Add to cart</button>
+    </div>
+  );
 
   return (
     <div className="ui card">
@@ -30,31 +66,8 @@ const FilmCard = ({ film }) => {
           </span>
         </div>
       </div>
-      <div className="extra content">
-        <div className="ui two buttons">
-          {confirm ? (
-            <>
-              <span className="ui red button" onClick={() => deleteFilm(film)}>
-                <i className="ui icon check"></i>
-                YES
-              </span>
-              <span className="ui grey basic button" onClick={hideConfirm}>
-                <i className="ui icon icon close" />
-                NO
-              </span>
-            </>
-          ) : (
-            <>
-              <span className="ui green basic button" onClick={() => selectFilmForEdit(film)}>
-                <i className="ui icon edit"></i>
-              </span>
-              <span className="ui red basic button" onClick={showConfirm}>
-                <i className="ui icon trash"></i>
-              </span>
-            </>
-          )}
-        </div>
-      </div>
+      {user.token && user.role === 'admin' && adminActions}
+      {user.token && user.role === 'user' && userAction}
     </div>
   );
 };

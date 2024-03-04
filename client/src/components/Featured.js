@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import FilmContext from '../context/FilmContext';
+import { AppContext } from '../pages/FilmsPage';
 
 const Featured = ({ featured, id }) => {
-  const { toggleFeatured } = useContext(FilmContext);
+  const { toggleFeatured } = useContext(AppContext);
 
   const cls = featured ? 'yellow' : 'empty';
   return (
