@@ -4,39 +4,41 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
-//POST route to  handle user authentication
-router.post("/", (req, res) => {
-  // Extract email and apassword from request body
+// POST route to handle user authentication
+router.post("/", async (req, res) => {
+  // Extract email and password from request body
   const { email, password } = req.body.credentials;
 
-  //GET RENFERENCE TO THE DATABASE FROM THE EXPRESS APP
+  // Get reference to the database from the Express app
   const db = req.app.get("db");
 
-  db.collection("users").findOne({ email }, (err, doc) => {
-    // handle database error
-    if (err) {
-      req.status(500).json({ errors: { global: err } });
-      return;
-    }
+  try {
+    // Find the user in the database
+    const user = await db.collection("users").findOne({ email });
 
-    // if user exists
-    if (doc) {
+    // If user exists
+    if (user) {
       // Compare provided password with hashed password stored in database
-      if (bcrypt.compareSync(password, doc.password)) {
+      if (bcrypt.compareSync(password, user.password)) {
         // If password matches, generate a JWT token with user data and send it in the response
         const token = jwt.sign(
-          { user: { _id: doc._id, email: doc.email, role: doc.role } },
+          { user: { _id: user._id, email: user.email, role: user.role } },
           process.env.JWT_SECRET
         );
         res.json({ token });
       } else {
-        // if password doesnt match send 401 UnAuthorized response
+        // If password doesn't match, send 401 Unauthorized response
         res.status(401).json({ errors: { global: "Invalid credentials" } });
       }
     } else {
-      // If user doesnt exist
+      // If user doesn't exist, send 401 Unauthorized response
       res.status(401).json({ errors: { global: "Invalid credentials" } });
     }
-  });
+  } catch (err) {
+    // Handle database error
+    console.error(err);
+    res.status(500).json({ errors: { global: err.message } });
+  }
 });
+
 module.exports = router;

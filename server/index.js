@@ -33,7 +33,7 @@ app.use("/api/auth", auth);
 app.use("/api/films", films);
 app.use("/api/authfilms", authfilms);
 
-const port = process.env.PORT || 4000;
+const port = 4000;
 
 //lidhje me mongodb
 const dbName = "playground";
@@ -69,6 +69,7 @@ const options = {
 };
 MongoClient.connect(uri, options)
   .then((client) => {
+    console.log("client");
     const db = client.db(dbName);
     app.set("db", db);
 

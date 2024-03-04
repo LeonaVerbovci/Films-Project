@@ -1,13 +1,11 @@
 const express = require("express");
 const mongodb = require("mongodb");
-const authenticate = require("../authenticate");
-const adminOnly = require("../adminOnly");
-
+//needs to be fixed
+const authenticate = require("../middlewares/authenticate");
+const adminOnly = require("../middlewares/adminOnly");
 const router = express.Router();
-
 const validate = (data) => {
   const errors = {};
-
   if (!data.title) errors.title = "Title field can't be blank";
   if (!data.description)
     errors.description = "Description field can't be blank";
@@ -18,95 +16,78 @@ const validate = (data) => {
   if (data.price <= 0) errors.price = "Wrong price";
   if (data.duration <= 0)
     errors.duration = "Duration must be only positive value";
-
   return errors;
 };
-
-router.get("/", (req, res) => {
-  const db = req.app.get("db");
-  db.collection("films")
-    .find({})
-    .toArray((err, films) => {
-      if (err) {
-        res.status(500).json({ errors: { global: err } });
-        return;
-      }
-
-      res.json({ films });
-    });
+router.get("/", async (req, res) => {
+  try {
+    const db = req.app.get("db");
+    const films = await db.collection("films").find({}).toArray();
+    res.json({ films });
+  } catch (err) {
+    console.error("err", err);
+    res.status(500).json({ errors: { global: err.message } });
+  }
 });
-
-router.get("/:_id", (req, res) => {
-  const db = req.app.get("db");
-  db.collection("films").findOne(
-    { _id: new mongodb.ObjectId(req.params._id) },
-    (err, film) => {
-      if (err) {
-        res.status(500).json({ errors: { global: err } });
-        return;
-      }
-
-      res.json({ film });
-    }
-  );
+router.get("/:_id", async (req, res) => {
+  try {
+    const db = req.app.get("db");
+    const film = await db
+      .collection("films")
+      .findOne({ _id: new mongodb.ObjectId(req.params._id) });
+    res.json({ film });
+  } catch (err) {
+    console.error("err", err);
+    res.status(500).json({ errors: { global: err } });
+  }
 });
-
-router.post("/", authenticate, adminOnly, (req, res) => {
+router.post("/", authenticate, adminOnly, async (req, res) => {
   const db = req.app.get("db");
   const errors = validate(req.body.film);
-
   if (Object.keys(errors).length === 0) {
-    db.collection("films").insertOne(req.body.film, (err, r) => {
-      if (err) {
-        res.status(500).json({ errors: { global: err } });
-        return;
-      }
-
+    try {
+      const r = await db.collection("films").insertOne(req.body.film);
       res.json({ film: r.ops[0] });
-    });
+      //qe u shtu i fundit, eshte i pari
+    } catch (err) {
+      console.error("err", err);
+      res.status(500).json({ errors: { global: err } });
+    }
   } else {
     res.status(400).json({ errors });
   }
 });
-
-router.put("/:_id", authenticate, adminOnly, (req, res) => {
+router.put("/:_id", authenticate, adminOnly, async (req, res) => {
   const db = req.app.get("db");
   const { _id, ...filmData } = req.body.film;
   const errors = validate(filmData);
-
   if (Object.keys(errors).length === 0) {
-    db.collection("films").findOneAndUpdate(
-      { _id: new mongodb.ObjectId(req.params._id) },
-      { $set: filmData },
-      { returnOriginal: false },
-      (err, r) => {
-        if (err) {
-          res.status(500).json({ errors: { global: err } });
-          return;
-        }
-
-        res.json({ film: r.value });
-      }
-    );
+    try {
+      const r = await db
+        .collection("films")
+        .findOneAndUpdate(
+          { _id: new mongodb.ObjectId(req.params._id) },
+          { $set: filmData },
+          { returnOriginal: false }
+        );
+      res.json({ film: r.value });
+    } catch (err) {
+      console.error("err", err);
+      res.status(500).json({ errors: { global: err } });
+    }
   } else {
     res.status(400).json({ errors });
   }
 });
-
-router.delete("/:_id", authenticate, adminOnly, (req, res) => {
+router.delete("/:_id", authenticate, adminOnly, async (req, res) => {
   const db = req.app.get("db");
-
-  db.collection("films").deleteOne(
-    { _id: new mongodb.ObjectId(req.params._id) },
-    (err) => {
-      if (err) {
-        res.status(500).json({ errors: { global: err } });
-        return;
-      }
-
-      res.json({});
-    }
-  );
+  try {
+    await db
+      .collection("films")
+      .deleteOne({ _id: new mongodb.ObjectId(req.params._id) });
+    res.json({});
+  } catch (err) {
+    console.error("err", err);
+    res.status(500).json({ errors: { global: err } });
+  }
 });
-
 module.exports = router;
