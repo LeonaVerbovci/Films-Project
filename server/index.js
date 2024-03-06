@@ -3,6 +3,7 @@ const path = require("path");
 const mongodb = require("mongodb"); //driverat per node js
 const bodyParser = require("body-parser"); //middleware per me i bo parse request bodys
 const dotenv = require("dotenv"); //load
+const cors = require("cors");
 
 const { MongoClient } = mongodb; //import mongoclient prej mongodb
 
@@ -12,7 +13,7 @@ const auth = require("./src/routes/auth.js");
 const authfilms = require("./src/routes/authfilms.js");
 
 const app = express(); //qysh e krijojme nje app express
-
+app.use(cors());
 dotenv.config(); // mundemi me manipulu me te dhena mbrenda env file
 
 const isDev = app.get("env") === "development"; // a eshte ne dev mode apo production
@@ -34,10 +35,10 @@ app.use("/api/films", films);
 app.use("/api/authfilms", authfilms);
 
 const port = 4000;
-
 //lidhje me mongodb
 const dbName = "playground";
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/playground";
+const uri =
+  "mongodb+srv://leonaverbovci:XJTYAYe3qrDdRuuh@playground.egqbbcy.mongodb.net/?retryWrites=true&w=majority&appName=playground";
 
 //me i kallzu qa me perdor ne request tone
 const options = {

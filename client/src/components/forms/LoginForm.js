@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FormMessage from './FormMessage';
 import PropTypes from 'prop-types';
+import FormMessage from './FormMessage';
 
 const initialData = {
   email: '',
@@ -86,6 +86,7 @@ const LoginForm = ({ submit }) => {
     </form>
   );
 };
+
 LoginForm.propTypes = {
   submit: PropTypes.func.isRequired,
 };

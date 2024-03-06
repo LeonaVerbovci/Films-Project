@@ -4,8 +4,8 @@ import { AppContext } from '../pages/FilmsPage';
 
 const Featured = ({ featured, id }) => {
   const { toggleFeatured } = useContext(AppContext);
-
   const cls = featured ? 'yellow' : 'empty';
+
   return (
     <span className="ui right corner label" onClick={() => toggleFeatured(id)}>
       <i className={`star icon ${cls}`} />
@@ -14,8 +14,8 @@ const Featured = ({ featured, id }) => {
 };
 
 Featured.propTypes = {
-  id: PropTypes.string.isRequired,
   featured: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default Featured;

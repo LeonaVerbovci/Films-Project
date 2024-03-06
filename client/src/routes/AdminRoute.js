@@ -1,27 +1,18 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Route, Navigate, Routes } from 'react-router-dom';
 
-const AdminRoute = () => {
-  //This defines a functional component called AdminRoute
-  //that accepts three props: user, render, and ...rest(rest of the props).
+const AdminRoute = ({ user, element: Element, ...rest }) => {
   return (
-    <div>test</div>
-    // <Route>
-    //   {
-    //     //This uses the spread operator to pass along any additional props (...rest) to the Route component.
-    //     ...rest
-    //   }
-    //   render ={' '}
-    //   {(props) => (user.token && user.role === 'admin' ? render(props) : <Redirect to="/films" />)}
-    // </Route>
+    <Routes>
+      <Route
+        {...rest}
+        element={(props) =>
+          user.token && user.role === 'admin' ? <Element {...props} /> : <Navigate to="/films" />
+        }
+      />
+    </Routes>
   );
 };
 
-AdminRoute.propTypes = {
-  user: PropTypes.shape({
-    token: PropTypes.string,
-    role: PropTypes.string,
-  }),
-  render: PropTypes.func.isRequired,
-};
 export default AdminRoute;

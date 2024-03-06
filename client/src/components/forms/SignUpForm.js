@@ -28,7 +28,12 @@ const SignUpForm = ({ submit }) => {
 
   const validate = (data) => {
     const validationErrors = {};
-    if (!isEmail(data.email)) validationErrors.email = 'Email format is wrong';
+
+    if (!isEmail(data.email)) {
+      validationErrors.email = 'Email format is wrong';
+    }
+
+    return validationErrors;
   };
 
   const handleSubmit = (e) => {

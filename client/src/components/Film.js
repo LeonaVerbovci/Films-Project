@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; // Import PropTypes
 import api from '../api';
 
 const Film = ({ match }) => {
@@ -12,22 +12,24 @@ const Film = ({ match }) => {
       setLoading(false);
     });
   }, [match.params._id]);
+
   return (
     <>
       {loading ? (
-        <h1>........loading........</h1>
+        <h1>....Loading ....</h1>
       ) : (
         <>
-          <h1 className="ui center aligned diving header">{film.title}</h1>
-          <div className="ui grid ">
+          <h1 className="ui center aligned dividing header">{film.title}</h1>
+          <div className="ui grid">
             <div className="four wide column">
               <img className="ui fluid image" src={film.img} alt={film.name} />
             </div>
+
             <div className="six wide column">
               <p>{film.description}</p>
-              <p> Director: {film.director}</p>
-              <p>Duration:{film.duration}</p>
-              <p> Price: {film.price}</p>
+              <p>Director {film.director}</p>
+              <p>Duration {film.duration}</p>
+              <p>Price {film.price} $</p>
             </div>
           </div>
         </>
@@ -36,6 +38,7 @@ const Film = ({ match }) => {
   );
 };
 
+// Define propTypes to validate props
 Film.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
